@@ -1,12 +1,17 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-body{
+body {
   @apply bg-white dark:bg-gray-900;
 }
-
+.green {
+  @apply text-green-600 dark:text-green-400;
+}
+.red {
+  @apply text-red-600 dark:text-red-400;
+}
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: "Public Sans", sans-serif;
 
   --color-green-50: #effdf5;
   --color-green-100: #d9fbe8;
