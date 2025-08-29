@@ -1,0 +1,10 @@
+<template>
+  <div class="flex flex-col items-center justify-center gap-4 h-screen">
+    Index
+  </div>
+</template>
+<script setup>
+definePageMeta({
+    colorMode: "dark"
+})
+</script>
