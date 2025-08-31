@@ -8,9 +8,9 @@
         <div>
             <USkeleton class="h-6 w-full" v-if="loading"></USkeleton>
             <div v-else class="flex space-x-1 items-center text-sm">
-                <UIcon name="i-fluent-arrow-trending-24-filled" class="w-6 h-6" :class="[color]"></UIcon>
+                <UIcon :name="icon" class="w-6 h-6" :class="trendingUp ? 'green' : 'red'"></UIcon>
                 <div class="text-gray-500 dark:text-gray-400">
-                    30% vs last period
+                    {{percantage}}% vs last period
                 </div>
             </div>
         </div>
@@ -18,11 +18,25 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
     title:  string,
     amount: number,
     lastAmount: number,
     color:string,
     loading: boolean
-}>()
+}>();
+
+const trendingUp = computed(()=> {
+    return props.amount >= props.lastAmount;
+})
+
+const icon = computed(() => {
+    return trendingUp.value ? "i-fluent-arrow-trending-24-filled" : "i-fluent-arrow-trending-down-24-filled";
+})
+
+const percantage = computed(()=> {
+    const result = props.amount - props.lastAmount;
+    const smallest = Math.min(props.amount, props.lastAmount)
+    return Math.floor(Math.abs(result / smallest) * 100);
+})
 </script>
