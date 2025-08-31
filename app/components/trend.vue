@@ -9,6 +9,9 @@
             <USkeleton class="h-6 w-full" v-if="loading"></USkeleton>
             <div v-else class="flex space-x-1 items-center text-sm">
                 <UIcon name="i-fluent-arrow-trending-24-filled" class="w-6 h-6" :class="[color]"></UIcon>
+                <div class="text-gray-500 dark:text-gray-400">
+                    30% vs last period
+                </div>
             </div>
         </div>
     </div>
