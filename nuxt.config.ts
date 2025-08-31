@@ -2,9 +2,16 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  modules: ['@nuxt/ui', '@nuxt/eslint', '@nuxt/content'],
+  modules: [
+    '@nuxt/ui',
+    '@nuxt/eslint',
+    '@nuxt/content',
+    '@nuxtjs/supabase'
+  ],
 
   css: ['~/assets/css/main.css'],
-
+  supabase : {
+    redirect: false
+  },
   compatibilityDate: '2025-07-16'
 })

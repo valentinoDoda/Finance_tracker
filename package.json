@@ -16,6 +16,7 @@
     "@iconify-json/simple-icons": "^1.2.49",
     "@nuxt/content": "^3.6.3",
     "@nuxt/ui": "^3.3.2",
+    "@nuxtjs/supabase": "^1.6.1",
     "nuxt": "^4.0.3"
   },
   "devDependencies": {
