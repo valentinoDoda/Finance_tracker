@@ -12,10 +12,14 @@
       <Trend color="green" title="Income" :amount="4000" :last-amount="3000" :loading="false"></Trend>
       <Trend color="red" title="Income" :amount="4000" :last-amount="3000" :loading="false"></Trend>
     </section>
+
+
+    <section>
+      <Transaction></Transaction>
+    </section>
   </div>
 </template>
 <script setup>
-import Trend from '~/components/trend.vue';
 import {TIME_OPTIONS} from '../../contants.ts'
 const selectTime = TIME_OPTIONS;
 //const timeOptions = ["Yearly", "Monthly"]
