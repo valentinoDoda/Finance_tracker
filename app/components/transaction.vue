@@ -2,7 +2,7 @@
   <div class="grid grid-cols-2 py-4 border-b">
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-1">
-        <UIcon name="i-heroicons-arrow-up-right" class="text-green-400" />
+        <UIcon :name="iconType" :class="iconTypeColor" />
         <div>{{transaction.description}}</div>
       </div>
       <div>
@@ -23,6 +23,10 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
+const iconColors = {
+  "red" : "text-red-400",
+  "green" : "text-green-400"
+} 
 const props = defineProps<{
   transaction: {
     id: string,
@@ -33,6 +37,18 @@ const props = defineProps<{
   }
 }>()
 const { currency } = useCurrency(props.transaction.amount);
+
+const isIncome = computed(()=> {
+  return props.transaction.type.toLowerCase() == "income"
+})
+
+const iconType = computed(() => {
+  return isIncome.value ? "i-heroicons-arrow-up-right-16-solid" : "i-heroicons-arrow-down-left-16-solid"
+})
+
+const iconTypeColor = computed(() => {
+  return isIncome.value ? iconColors.green : iconColors.red;
+}) 
 
 const items: DropdownMenuItem[] = [
   {
