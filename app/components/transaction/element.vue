@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
 const supabase = useSupabaseClient();
+const emit = defineEmits(["deleted"])
 const iconColors = {
   red: "text-red-400",
   green: "text-green-400",
@@ -62,7 +63,7 @@ const iconTypeColor = computed(() => {
 
 const isLoading = ref(false);
 const toast = useToast();
-console.log(toast);
+
 
 const deleteTransaction = async() => {
   isLoading.value = true;
@@ -72,6 +73,7 @@ const deleteTransaction = async() => {
       title: `Transaction with id ${props.transaction.id} deleted`,
       icon: "i-heroicons-exclamation-circle",
     });
+    emit("deleted", props.transaction.id);
   } catch (error) {
     toast.add({
       title: `Transaction with id ${props.transaction.id} deleted`,
