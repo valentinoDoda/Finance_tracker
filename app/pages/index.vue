@@ -12,33 +12,49 @@
       <Trend
         color="green"
         title="Income"
-        :amount="2000"
+        :amount="incomeTotal"
         :last-amount="3000"
         :loading="isLoading"
       ></Trend>
       <Trend
         color="red"
-        title="Income"
-        :amount="4000"
+        title="Expense"
+        :amount="expenseTotal"
         :last-amount="3000"
         :loading="isLoading"
       ></Trend>
       <Trend
         color="green"
-        title="Income"
+        title="Investments"
         :amount="4000"
         :last-amount="3000"
         :loading="isLoading"
       ></Trend>
       <Trend
         color="red"
-        title="Income"
+        title="Saving"
         :amount="4000"
         :last-amount="3000"
         :loading="isLoading"
       ></Trend>
     </section>
-
+    <section class="flex justify-between mb-10">
+      <div>
+        <h2 class="text-2xl font-extrabold">Transactions</h2>
+        <div class="text-gray-500 dark:text-gray-400">
+          You have {{ typesOfTransactions.income.length }} incomes and {{ typesOfTransactions.expense.length }} expenses
+          this period
+        </div>
+      </div>
+      <div>
+        <UButton
+          icon="i-heroicons-plus-circle"
+          color="white"
+          variant="solid"
+          label="Add"
+        />
+      </div>
+    </section>
     <section v-if="!isLoading">
       <div class="mt-12" v-for="(t, index) in transactionsGroupedByDate">
         <TransactionSummary :date="index" :transactions="t" />
@@ -89,11 +105,34 @@ const transactionsGroupedByDate = computed(() => {
   const grouped = Object.groupBy(transactions.value, (transaction) => {
     return new Date(transaction.created_at).toISOString().split("T")[0];
   });
-  console.log(grouped)
+  console.log(grouped);
   return grouped;
 });
 
-console.log(transactionsGroupedByDate.value);
+const typesOfTransactions = computed(() => {
+  return Object.groupBy(transactions.value, (t) => {
+    return t.type.toLowerCase() == "income" ? "income" : "expense";
+  });
+});
+
+const incomeTotal = computed(() => {
+  return typesOfTransactions.value.income.reduce((acc, inc) => {
+    return (acc += inc.amount);
+  }, 0);
+});
+
+const expenseTotal = computed(() => {
+  return Math.abs(
+    typesOfTransactions.value.expense.reduce((acc, exp) => {
+      return (acc -= exp.amount);
+    }, 0)
+  );
+});
+console.log(
+  transactionsGroupedByDate.value,
+  incomeTotal.value,
+  expenseTotal.value
+);
 definePageMeta({
   colorMode: "dark",
 });
