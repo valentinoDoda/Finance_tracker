@@ -3,7 +3,7 @@
         <div class="font-bold" :class="[color]">{{title}}</div>
         <div class="text-2xl font-extrabold text-black dark:text-white mb-2">
             <USkeleton class="h-8 w-full" v-if="loading"></USkeleton>
-            <div v-else>{{currency}}</div>
+            <div v-else>{{amount}}</div>
         </div>
         <div>
             <USkeleton class="h-6 w-full" v-if="loading"></USkeleton>
@@ -26,7 +26,10 @@ const props = defineProps<{
     loading: boolean
 }>();
 
-const {currency} = useCurrency(props.amount);
+const amount = computed(()=> {
+    const {currency} = useCurrency(props.amount)
+    return currency
+}) 
 
 const trendingUp = computed(()=> {
     return props.amount >= props.lastAmount;

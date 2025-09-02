@@ -73,6 +73,7 @@ const deleteTransaction = async() => {
       title: `Transaction with id ${props.transaction.id} deleted`,
       icon: "i-heroicons-exclamation-circle",
     });
+    console.log(props.transaction.id)
     emit("deleted", props.transaction.id);
   } catch (error) {
     toast.add({

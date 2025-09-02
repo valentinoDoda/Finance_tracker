@@ -62,7 +62,7 @@
           v-for="transaction in t"
           :key="transaction.id"
           :transaction="transaction"
-          @deleted="refreshTransactions()"
+          @deleted="refreshTransactions"
         />
       </div>
     </section>
