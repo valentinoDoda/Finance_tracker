@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-2 py-4 border-b">
-    <div class="flex items-center justify-between">
+  <div class="grid grid-cols-3 py-4 border-b">
+    <div class="flex items-center justify-between space-x-4  col-span-2">
       <div class="flex items-center space-x-1">
         <UIcon :name="iconType" :class="iconTypeColor" />
         <div>{{ transaction.description }}</div>
