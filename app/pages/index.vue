@@ -85,7 +85,7 @@ const isOpen = ref(false)
 const fetchTransactions = async () => {
   isLoading.value = true;
   try {
-    const { data, error } = await supabase.from("transactions").select("*");
+    const { data, error } = await supabase.from("transactions").select("*").order("created_at", {ascending: false});
 
     if (error) {
       console.error("Σφάλμα στο fetch:", error);
