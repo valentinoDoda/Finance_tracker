@@ -2,12 +2,21 @@
   <UModal v-model:open="isOpen">
     <template #header> Add Transaction </template>
     <template #body>
-      <UForm :state="stateForm">
+      <UForm
+        :state="stateForm"
+        :schema="schema"
+        ref="form"
+        @submit.prevent="save"
+      >
         <UFormField label="Transaction Type" name="type" required="true">
           <USelect :items="types" v-model="stateForm.type"></USelect>
         </UFormField>
         <UFormField label="Amount" required="true" name="amount">
-          <UInput type="number" placeholder="Amount" v-model.number="stateForm.amount"/>
+          <UInput
+            type="number"
+            placeholder="Amount"
+            v-model.number="stateForm.amount"
+          />
         </UFormField>
         <UFormField label="Transaction date" name="created_at" required="true">
           <UInput
@@ -19,16 +28,27 @@
         <UFormField label="Description" hint="Optional" name="description">
           <UTextarea v-model.trim="stateForm.description"></UTextarea>
         </UFormField>
-        <UFormField label="Category" required name="category">
+        <UFormField
+          label="Category"
+          required
+          name="category"
+          v-if="stateForm.type === 'Expense'"
+        >
           <USelect :items="categories" v-model="stateForm.category"></USelect>
         </UFormField>
-        <button @click="save()" class="bg-white p-2 w-full text-black rounded-sm cursor-pointer hover:bg-gray-200 transition-all duration-100">Save</button>
+        <button
+          @click="save"
+          class="bg-white p-2 w-full text-black rounded-sm cursor-pointer hover:bg-gray-200 transition-all duration-100"
+        >
+          Save
+        </button>
       </UForm>
     </template>
   </UModal>
 </template>
 
 <script setup>
+import { z } from "zod";
 import {
   TRANSACTIONS_TYPES,
   TRANSACTIONS_CATEGORIES,
@@ -37,18 +57,50 @@ const isOpen = defineModel();
 const types = TRANSACTIONS_TYPES;
 const categories = TRANSACTIONS_CATEGORIES;
 
-
 const stateForm = reactive({
-    type: types[0],
-    amount: 0, 
-    category : categories[0],
-    created_at : undefined,
-    description : "",
+  type: types[0],
+  amount: 0,
+  category: categories[0],
+  created_at: undefined,
+  description: "",
+});
 
-})
-function save() {
-  console.log("Saved");
-}
+const defaultSchema = z.object({
+  created_at: z.string(),
+  description: z.string().optional(),
+  amount: z.number().positive("Amount needs to be more than 0"),
+});
+
+const incomeSchema = z.object({
+  type: z.literal("Income"),
+});
+const expenseSchema = z.object({
+  type: z.literal("Expense"),
+  category: z.enum(categories),
+});
+const investmentSchema = z.object({
+  type: z.literal("Investment"),
+});
+const savingSchema = z.object({
+  type: z.literal("Saving"),
+});
+
+const schema = z.intersection(
+  z.discriminatedUnion("type", [
+    incomeSchema,
+    expenseSchema,
+    investmentSchema,
+    savingSchema,
+  ]),
+  defaultSchema
+);
+
+const form = ref();
+
+const save = async () => {
+  form.value.validate();
+};
+
 </script>
 
 <style scoped>
