@@ -53,7 +53,7 @@
           color="white"
           variant="solid"
           label="Add"
-          @click="isOpen = true"
+          @click="isOpen=true"
         />
       </div>
     </section>
