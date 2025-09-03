@@ -6,8 +6,8 @@
         <div>{{ transaction.description }}</div>
       </div>
       <div>
-        <UBadge variant="outline" color="neutral">{{
-          transaction?.category || "No category"
+        <UBadge v-if="transaction?.category" variant="outline" color="neutral">{{
+          transaction?.category
         }}</UBadge>
       </div>
     </div>
