@@ -57,13 +57,26 @@ const isOpen = defineModel();
 const types = TRANSACTIONS_TYPES;
 const categories = TRANSACTIONS_CATEGORIES;
 
-const stateForm = reactive({
-  type: types[0],
-  amount: 0,
-  category: categories[0],
-  created_at: undefined,
-  description: "",
+watch(isOpen, (n) => {
+  if (!n) {
+    resetForm()
+  }
 });
+
+const initializeForm = {
+  type: undefined,
+  amount: 0,
+  category: undefined,
+  created_at: undefined,
+  description: undefined
+};
+const stateForm = reactive({
+  ...initializeForm
+});
+
+const resetForm = ()=> {
+    Object.assign(stateForm, initializeForm)
+}
 
 const defaultSchema = z.object({
   created_at: z.string(),
@@ -100,7 +113,6 @@ const form = ref();
 const save = async () => {
   form.value.validate();
 };
-
 </script>
 
 <style scoped>
