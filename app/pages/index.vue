@@ -42,18 +42,18 @@
       <div>
         <h2 class="text-2xl font-extrabold">Transactions</h2>
         <div class="text-gray-500 dark:text-gray-400">
-          You have {{ typesOfTransactions.income.length }} incomes and {{ typesOfTransactions.expense.length }} expenses
-          this period
+          You have {{ typesOfTransactions.income.length }} incomes and
+          {{ typesOfTransactions.expense.length }} expenses this period
         </div>
       </div>
       <div>
-        <TransactionModal v-model="isOpen" @saved="refreshTransactions"/>
+        <TransactionModal v-model="isOpen" @saved="refreshTransactions" />
         <UButton
           icon="i-heroicons-plus-circle"
           color="white"
           variant="solid"
           label="Add"
-          @click="isOpen=true"
+          @click="isOpen = true"
         />
       </div>
     </section>
@@ -76,66 +76,19 @@
 <script setup>
 import { TIME_OPTIONS } from "../../contants.ts";
 const selectTime = TIME_OPTIONS;
-const supabase = useSupabaseClient();
 const selectValue = ref(selectTime[2]);
-const transactions = ref([]);
-const isLoading = ref(false);
-const isOpen = ref(false)
+const isOpen = ref(false);
 
-const fetchTransactions = async () => {
-  isLoading.value = true;
-  try {
-    const { data, error } = await supabase.from("transactions").select("*").order("created_at", {ascending: false});
-
-    if (error) {
-      console.error("Σφάλμα στο fetch:", error);
-      return [];
-    }
-
-    return data;
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const refreshTransactions = async () => {
-  transactions.value = await fetchTransactions();
-};
-
+const {
+  isLoading,
+  transactions: { transactionsGroupedByDate },
+  incomeTotal,
+  expenseTotal,
+  refreshTransactions,
+  typesOfTransactions
+} = useFetchTransactions();
 await refreshTransactions();
 
-const transactionsGroupedByDate = computed(() => {
-  const grouped = Object.groupBy(transactions.value, (transaction) => {
-    return new Date(transaction.created_at).toISOString().split("T")[0];
-  });
-  console.log(grouped);
-  return grouped;
-});
-
-const typesOfTransactions = computed(() => {
-  return Object.groupBy(transactions.value, (t) => {
-    return t.type.toLowerCase() == "income" ? "income" : "expense";
-  });
-});
-
-const incomeTotal = computed(() => {
-  return typesOfTransactions.value.income.reduce((acc, inc) => {
-    return (acc += inc.amount);
-  }, 0);
-});
-
-const expenseTotal = computed(() => {
-  return Math.abs(
-    typesOfTransactions.value.expense.reduce((acc, exp) => {
-      return (acc -= exp.amount);
-    }, 0)
-  );
-});
-console.log(
-  transactionsGroupedByDate.value,
-  incomeTotal.value,
-  expenseTotal.value
-);
 definePageMeta({
   colorMode: "dark",
 });
