@@ -78,7 +78,12 @@ import { TIME_OPTIONS } from "../../contants.ts";
 const selectTime = TIME_OPTIONS;
 const selectValue = ref(selectTime[2]);
 const isOpen = ref(false);
+const dates = useSelectedTimePeriod(selectValue)
 
+watch(selectValue, (n)=> {
+  console.log(dates.value, n)
+})
+console.log(dates.value)
 const {
   isLoading,
   transactions: { transactionsGroupedByDate },

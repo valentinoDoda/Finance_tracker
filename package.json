@@ -17,6 +17,7 @@
     "@nuxt/content": "^3.6.3",
     "@nuxt/ui": "^3.3.2",
     "@nuxtjs/supabase": "^1.6.1",
+    "date-fns": "^4.1.0",
     "nuxt": "^4.0.3",
     "zod": "^3.25.76"
   },
