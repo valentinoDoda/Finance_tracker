@@ -6,37 +6,11 @@
       <h1>Summary</h1>
       <u-select-menu :items="selectTime" v-model="selectValue" />
     </div>
-    <section
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10"
-    >
-      <Trend
-        color="green"
-        title="Income"
-        :amount="incomeTotal"
-        :last-amount="3000"
-        :loading="isLoading"
-      ></Trend>
-      <Trend
-        color="red"
-        title="Expense"
-        :amount="expenseTotal"
-        :last-amount="3000"
-        :loading="isLoading"
-      ></Trend>
-      <Trend
-        color="green"
-        title="Investments"
-        :amount="4000"
-        :last-amount="3000"
-        :loading="isLoading"
-      ></Trend>
-      <Trend
-        color="red"
-        title="Saving"
-        :amount="4000"
-        :last-amount="3000"
-        :loading="isLoading"
-      ></Trend>
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10">
+      <Trend color="green" title="Income" :amount="incomeTotal" :last-amount="3000" :loading="isLoading"></Trend>
+      <Trend color="red" title="Expense" :amount="expenseTotal" :last-amount="3000" :loading="isLoading"></Trend>
+      <Trend color="green" title="Investments" :amount="4000" :last-amount="3000" :loading="isLoading"></Trend>
+      <Trend color="red" title="Saving" :amount="4000" :last-amount="3000" :loading="isLoading"></Trend>
     </section>
     <section class="flex justify-between mb-10">
       <div>
@@ -48,24 +22,14 @@
       </div>
       <div>
         <TransactionModal v-model="isOpen" @saved="refreshTransactions" />
-        <UButton
-          icon="i-heroicons-plus-circle"
-          color="white"
-          variant="solid"
-          label="Add"
-          @click="isOpen = true"
-        />
+        <UButton icon="i-heroicons-plus-circle" color="white" variant="solid" label="Add" @click="isOpen = true" />
       </div>
     </section>
     <section v-if="!isLoading">
       <div class="mt-12" v-for="(t, index) in transactionsGroupedByDate">
         <TransactionSummary :date="index" :transactions="t" />
-        <TransactionElement
-          v-for="transaction in t"
-          :key="transaction.id"
-          :transaction="transaction"
-          @deleted="refreshTransactions"
-        />
+        <TransactionElement v-for="transaction in t" :key="transaction.id" :transaction="transaction"
+          @deleted="refreshTransactions" />
       </div>
     </section>
     <section v-else>
@@ -76,24 +40,30 @@
 <script setup>
 import { TIME_OPTIONS } from "../../contants.ts";
 const selectTime = TIME_OPTIONS;
-const selectValue = ref(selectTime[2]);
+const selectValue = ref(selectTime[0]);
 const isOpen = ref(false);
-const dates = useSelectedTimePeriod(selectValue)
+const  { current, previous } = useSelectedTimePeriod(selectValue);
 
-watch(selectValue, (n)=> {
-  console.log(dates.value, n)
-})
-console.log(dates.value)
+
+
 const {
   isLoading,
   transactions: { transactionsGroupedByDate },
   incomeTotal,
   expenseTotal,
-  refreshTransactions,
-  typesOfTransactions
-} = useFetchTransactions();
-await refreshTransactions();
+  typesOfTransactions,
+  refreshTransactions
+} = useFetchTransactions(current);
 
+await refreshTransactions();
+// const {
+//   incomeTotal : prevIncome,
+//   expenseTotal : prevExpense,
+//   refreshTransactions : prevRefresh
+// } = useFetchTransactions(previous);
+
+// await Promise.all([curRefresh(), prevRefresh()])
+// await prevRefresh()
 definePageMeta({
   colorMode: "dark",
 });

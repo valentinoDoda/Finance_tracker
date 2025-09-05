@@ -1,14 +1,14 @@
-export const useFetchTransactions = () => {
+export const useFetchTransactions = (period) => {
   const supabase = useSupabaseClient();
   const transactions = ref([]);
   const isLoading = ref(false);
-
+  console.log(period.value.from.toISOString(),period.value.to.toISOString());
   const fetchTransactions = async () => {
     isLoading.value = true;
     try {
       const { data, error } = await supabase
         .from("transactions")
-        .select("*")
+        .select()
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -25,20 +25,24 @@ export const useFetchTransactions = () => {
   const refreshTransactions = async () => {
     transactions.value = await fetchTransactions();
   };
+
+  watch(period, async () => {
+    await refreshTransactions();
+    console.log(period.value.from.toISOString(),period.value.to.toISOString());
+  });
+
   const transactionsGroupedByDate = computed(() => {
     const grouped = Object.groupBy(transactions.value, (transaction) => {
       return new Date(transaction.created_at).toISOString().split("T")[0];
     });
-    console.log(grouped);
+
     return grouped;
   });
-
   const typesOfTransactions = computed(() => {
     return Object.groupBy(transactions.value, (t) => {
       return t.type.toLowerCase() == "income" ? "income" : "expense";
     });
   });
-
   const incomeTotal = computed(() => {
     return typesOfTransactions.value.income.reduce((acc, inc) => {
       return (acc += inc.amount);
@@ -56,11 +60,11 @@ export const useFetchTransactions = () => {
   return {
     refreshTransactions,
     transactions: {
-        transactionsGroupedByDate
+      transactionsGroupedByDate,
     },
     incomeTotal,
     expenseTotal,
     isLoading,
-    typesOfTransactions
+    typesOfTransactions,
   };
 };
