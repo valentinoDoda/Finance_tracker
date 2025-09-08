@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
   supabase : {
-    redirect: false
+    redirect: true
   },
   compatibilityDate: '2025-07-16'
 })
