@@ -16,8 +16,8 @@
       <div>
         <h2 class="text-2xl font-extrabold">Transactions</h2>
         <div class="text-gray-500 dark:text-gray-400">
-          You have {{ typesOfTransactions.income.length }} incomes and
-          {{ typesOfTransactions.expense.length }} expenses this period
+          You have {{ typesOfTransactions?.income?.length || 0 }} incomes and
+          {{ typesOfTransactions?.expense?.length || 0 }} expenses this period
         </div>
       </div>
       <div>

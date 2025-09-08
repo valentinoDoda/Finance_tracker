@@ -1,8 +1,9 @@
 export const useFetchTransactions = (period) => {
   const supabase = useSupabaseClient();
   const transactions = ref([]);
+  console.log(transactions.value);
   const isLoading = ref(false);
-  console.log(period.value.from.toISOString(),period.value.to.toISOString());
+  console.log(period.value.from.toISOString(), period.value.to.toISOString());
   const fetchTransactions = async () => {
     isLoading.value = true;
     try {
@@ -28,7 +29,7 @@ export const useFetchTransactions = (period) => {
 
   watch(period, async () => {
     await refreshTransactions();
-    console.log(period.value.from.toISOString(),period.value.to.toISOString());
+    console.log(period.value.from.toISOString(), period.value.to.toISOString());
   });
 
   const transactionsGroupedByDate = computed(() => {
@@ -44,16 +45,16 @@ export const useFetchTransactions = (period) => {
     });
   });
   const incomeTotal = computed(() => {
-    return typesOfTransactions.value.income.reduce((acc, inc) => {
+    return typesOfTransactions.value?.income?.reduce((acc, inc) => {
       return (acc += inc.amount);
-    }, 0);
+    }, 0) || 0;
   });
 
   const expenseTotal = computed(() => {
     return Math.abs(
-      typesOfTransactions.value.expense.reduce((acc, exp) => {
+      typesOfTransactions.value?.expense?.reduce((acc, exp) => {
         return (acc -= exp.amount);
-      }, 0)
+      }, 0)|| 0
     );
   });
 
