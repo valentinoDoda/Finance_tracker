@@ -31,7 +31,7 @@ const items = [
   }], [{
     label: 'Settings',
     icon: 'i-heroicons-cog-8-tooth',
-    onSelect(){console.log('Link to settings in the future')}
+    onSelect(){navigateTo('/settings/profile')}
   }, {
     label: 'Sign out',
     icon: 'i-heroicons-arrow-left-on-rectangle',
