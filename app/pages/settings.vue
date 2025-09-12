@@ -17,9 +17,5 @@ const links = [
     label: 'Avatar',
     to: '/settings/avatar'
   },
-  {
-    label: 'Settings',
-    to: '/settings/setting'
-  }
 ]
 </script>
