@@ -1,5 +1,5 @@
 <template>
-    <UForm :state="state" :schema="schema">
+  <UForm :state="state" :schema="schema" @submit.prevent="saveProfile">
     <UFormField class="mb-4" label="Full Name" name="name">
       <UInput v-model="state.name" />
     </UFormField>
@@ -9,21 +9,21 @@
       <UInput v-model="state.email" />
     </UFormField>
 
-    <UButton type="submit" color="neutral" variant="solid" label="Save" :pending="pending" />
+    <UButton type="submit" color="neutral" variant="solid" label="Save" :pending="pending" :disabled="pending"/>
   </UForm>
 </template>
 
 <script setup>
 import { z } from 'zod'
 
-//const supabase = useSupabaseClient()
+const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 console.log(user.value)
-//const { toastSuccess, toastError } = useAppToast()
+const toast = useToast()
 const pending = ref(false)
 
 const state = ref({
-  name: '',
+  name: user.value.user_metadata?.full_name,
   email: user.value.email
 })
 
@@ -31,4 +31,40 @@ const schema = z.object({
   name: z.string().min(2).optional(),
   email: z.string().email()
 })
+
+const saveProfile = async () => {
+  pending.value = true
+
+  try {
+    const data = {
+      data: {
+        full_name: state.value.name
+      }
+    }
+
+    if (state.value.email !== user.value.email) {
+      data.email = state.value.email
+    }
+
+    console.log(data)
+
+    const { error } = await supabase.auth.updateUser(data)
+    if (error) throw error
+    toast.add({
+      title: 'Profile updated',
+      icon: 'i-heroicons-exlamation-circle',
+      description: 'Your profile has been updated',
+      color: 'success'
+    })
+
+  } catch (error) {
+    toast.add({
+      title: 'Error updating profile',
+      description: error.message,
+      color: "error"
+    })
+  } finally {
+    pending.value = false
+  }
+}
 </script>
