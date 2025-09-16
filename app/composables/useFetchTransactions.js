@@ -1,9 +1,9 @@
-export const useFetchTransactions = (period) => {
+export const useFetchTransactions = () => {
   const supabase = useSupabaseClient();
   const transactions = ref([]);
   console.log(transactions.value);
   const isLoading = ref(false);
-  console.log(period.value.from.toISOString(), period.value.to.toISOString());
+  
   const fetchTransactions = async () => {
     isLoading.value = true;
     try {
@@ -27,10 +27,7 @@ export const useFetchTransactions = (period) => {
     transactions.value = await fetchTransactions();
   };
 
-  watch(period, async () => {
-    await refreshTransactions();
-    console.log(period.value.from.toISOString(), period.value.to.toISOString());
-  });
+
 
   const transactionsGroupedByDate = computed(() => {
     const grouped = Object.groupBy(transactions.value, (transaction) => {

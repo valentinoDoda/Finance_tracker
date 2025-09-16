@@ -4,7 +4,6 @@
 
     <div class="summary flex justify-between">
       <h1>Summary</h1>
-      <u-select-menu :items="selectTime" v-model="selectValue" />
     </div>
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10">
       <Trend color="green" title="Income" :amount="incomeTotal" :last-amount="3000" :loading="isLoading"></Trend>
@@ -29,7 +28,7 @@
       <div class="mt-12" v-for="(t, index) in transactionsGroupedByDate">
         <TransactionSummary :date="index" :transactions="t" />
         <TransactionElement v-for="transaction in t" :key="transaction.id" :transaction="transaction"
-          @deleted="refreshTransactions" />
+          @deleted="refreshTransactions" @edited="refreshTransactions" />
       </div>
     </section>
     <section v-else>
@@ -42,7 +41,7 @@ import { TIME_OPTIONS } from "../../contants.ts";
 const selectTime = TIME_OPTIONS;
 const selectValue = ref(selectTime[0]);
 const isOpen = ref(false);
-const  { current, previous } = useSelectedTimePeriod(selectValue);
+
 
 
 
@@ -53,7 +52,7 @@ const {
   expenseTotal,
   typesOfTransactions,
   refreshTransactions
-} = useFetchTransactions(current);
+} = useFetchTransactions();
 
 await refreshTransactions();
 // const {

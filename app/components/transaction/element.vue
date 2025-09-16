@@ -22,6 +22,7 @@
             variant="ghost"
             trailing-icon="i-heroicons-ellipsis-horizontal"
           ></UButton>
+          <TransactionModal v-model="isOpen" :transaction="transaction" @saved="emit('edited')" />
         </UDropdownMenu>
       </div>
     </div>
@@ -31,7 +32,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
 const supabase = useSupabaseClient();
-const emit = defineEmits(["deleted"])
+const emit = defineEmits(["deleted", 'edited'])
 const iconColors = {
   red: "text-red-400",
   green: "text-green-400",
@@ -63,7 +64,7 @@ const iconTypeColor = computed(() => {
 
 const isLoading = ref(false);
 const toast = useToast();
-
+const isOpen = ref(false)
 
 const deleteTransaction = async() => {
   isLoading.value = true;
@@ -89,7 +90,7 @@ const items: DropdownMenuItem[] = [
   {
     label: "Edit",
     icon: "i-heroicons-pencil-square-20-solid",
-    onSelect: () => console.log("Edit button is clicked"),
+    onSelect: () => isOpen.value = true,
   },
   {
     color: "error",
