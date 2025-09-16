@@ -46,7 +46,12 @@ const props = defineProps<{
     category?: string;
   };
 }>();
-const { currency } = useCurrency(props.transaction.amount);
+
+const amount = computed(()=> {
+  return props.transaction.amount
+})
+const { currency } = useCurrency(amount);
+
 
 const isIncome = computed(() => {
   return props.transaction.type.toLowerCase() == "income";

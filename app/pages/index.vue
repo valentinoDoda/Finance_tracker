@@ -2,14 +2,12 @@
   <div>
     Index
 
-    <div class="summary flex justify-between">
+    <div class="summary">
       <h1>Summary</h1>
     </div>
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10">
+    <section class="grid grid-cols-1 sm:grid-cols-2 sm:gap-16 mb-10">
       <Trend color="green" title="Income" :amount="incomeTotal" :last-amount="3000" :loading="isLoading"></Trend>
       <Trend color="red" title="Expense" :amount="expenseTotal" :last-amount="3000" :loading="isLoading"></Trend>
-      <Trend color="green" title="Investments" :amount="4000" :last-amount="3000" :loading="isLoading"></Trend>
-      <Trend color="red" title="Saving" :amount="4000" :last-amount="3000" :loading="isLoading"></Trend>
     </section>
     <section class="flex justify-between mb-10">
       <div>
@@ -37,9 +35,7 @@
   </div>
 </template>
 <script setup>
-import { TIME_OPTIONS } from "../../contants.ts";
-const selectTime = TIME_OPTIONS;
-const selectValue = ref(selectTime[0]);
+
 const isOpen = ref(false);
 
 
