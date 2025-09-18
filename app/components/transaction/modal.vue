@@ -104,19 +104,13 @@ const expenseSchema = z.object({
   type: z.literal("Expense"),
   category: z.enum(categories),
 });
-const investmentSchema = z.object({
-  type: z.literal("Investment"),
-});
-const savingSchema = z.object({
-  type: z.literal("Saving"),
-});
+
 
 const schema = z.intersection(
   z.discriminatedUnion("type", [
     incomeSchema,
     expenseSchema,
-    investmentSchema,
-    savingSchema,
+   
   ]),
   defaultSchema
 );
